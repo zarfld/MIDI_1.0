@@ -245,21 +245,21 @@ This section references detailed Stakeholder Requirements documented as GitHub I
 
 ---
 
-### 3.7 Additional Stakeholder Requirements (To Be Created)
+### 3.7 Additional Stakeholder Requirements (Updated)
 
 The following stakeholder requirements are identified for future documentation:
 
 | Requirement ID | Title | Priority | Status | Description |
 |---------------|-------|----------|--------|-------------|
-| STR-COMP-003 | Testing Strategy and Quality Assurance | P0 | Planned | TDD, conformance tests, hardware-in-loop testing |
-| STR-USER-002 | Educational Use Cases and Learning Materials | P1 | Planned | Classroom materials, learning path, exercises |
-| STR-BUS-002 | Open Source Community Building | P1 | Planned | Governance, contribution guidelines, community support |
-| STR-COMP-005 | Build System and CI/CD | P1 | Planned | CMake, multi-platform CI matrix, automated testing |
-| STR-FUNC-002 | Control Change Controllers | P1 | Planned | 120 controller types, 14-bit resolution, RPN/NRPN |
-| STR-FUNC-003 | System Exclusive Message Handling | P1 | Planned | Manufacturer IDs, Universal SysEx sub-IDs |
-| STR-FUNC-004 | MIDI Time Code Extension | P2 | Planned | MTC Quarter Frame, Full Frame, frame rates |
-| STR-FUNC-005 | General MIDI Compliance | P2 | Planned | GM Level 1/2 sound sets, mandatory controllers |
-| STR-COMP-006 | C++14 Standard Compliance | P0 | Planned | No C++17/20 features, broad compiler support |
+| STR-COMP-003 | Testing Strategy and Quality Assurance | P0 | Draft | TDD, conformance tests, hardware-in-loop testing |
+| STR-USER-002 | Educational Use Cases and Learning Materials | P1 | Draft | Classroom materials, learning path, exercises |
+| STR-BUS-002 | Open Source Community Building | P1 | Draft | Governance, contribution guidelines, community support |
+| STR-COMP-005 | Build System and CI/CD | P1 | Draft | CMake, multi-platform CI matrix, automated testing |
+| STR-FUNC-002 | Control Change Controllers | P1 | Draft | 120 controller types, 14-bit resolution, RPN/NRPN |
+| STR-FUNC-003 | System Exclusive Message Handling | P1 | Draft | Manufacturer IDs, Universal SysEx sub-IDs |
+| STR-FUNC-004 | MIDI Time Code Extension | P2 | Draft | MTC Quarter Frame, Full Frame, frame rates |
+| STR-FUNC-005 | General MIDI Compliance | P2 | Draft | GM Level 1/2 sound sets, mandatory controllers |
+| STR-COMP-006 | C++14 Standard Compliance | P0 | Draft | No C++17/20 features, broad compiler support |
 
 ---
 
@@ -509,7 +509,7 @@ Before transitioning to **Phase 02: System Requirements Definition**, ensure:
 
 ---
 
-## Appendix A: Stakeholder Requirement GitHub Issues (Full Links)
+## Appendix A: Stakeholder Requirement GitHub Issues (Updated Full Links)
 
 | Issue Number | Issue ID | Title | URL |
 |--------------|---------|-------|-----|
@@ -519,6 +519,15 @@ Before transitioning to **Phase 02: System Requirements Definition**, ensure:
 | Issue #4 | STR-USER-001 | Developer Experience and API Usability | https://github.com/zarfld/MIDI_1.0/issues/4 |
 | Issue #5 | STR-COMP-004 | Modular Architecture with Optional Extensions | https://github.com/zarfld/MIDI_1.0/issues/5 |
 | Issue #6 | STR-SEC-001 | Security and Input Validation | https://github.com/zarfld/MIDI_1.0/issues/6 |
+| Issue #7 | STR-USER-002 | Educational Use Cases and Learning Materials | [GitHub Issue #7](https://github.com/zarfld/MIDI_1.0/issues/7) |
+| Issue #8 | STR-BUS-002 | Open Source Community Building | [GitHub Issue #8](https://github.com/zarfld/MIDI_1.0/issues/8) |
+| Issue #9 | STR-COMP-003 | Testing Strategy and Quality Assurance | [GitHub Issue #9](https://github.com/zarfld/MIDI_1.0/issues/9) |
+| Issue #10 | STR-COMP-005 | Build System and CI/CD Pipeline | [GitHub Issue #10](https://github.com/zarfld/MIDI_1.0/issues/10) |
+| Issue #11 | STR-FUNC-002 | Control Change Controllers and 14-bit Resolution | [GitHub Issue #11](https://github.com/zarfld/MIDI_1.0/issues/11) |
+| Issue #12 | STR-FUNC-003 | System Exclusive (SysEx) Message Handling | [GitHub Issue #12](https://github.com/zarfld/MIDI_1.0/issues/12) |
+| Issue #13 | STR-FUNC-004 | MIDI Time Code (MTC) Extension | [GitHub Issue #13](https://github.com/zarfld/MIDI_1.0/issues/13) |
+| Issue #14 | STR-FUNC-005 | General MIDI Compliance | [GitHub Issue #14](https://github.com/zarfld/MIDI_1.0/issues/14) |
+| Issue #15 | STR-COMP-006 | C++14 Standard Compliance | [GitHub Issue #15](https://github.com/zarfld/MIDI_1.0/issues/15) |
 
 ---
 
