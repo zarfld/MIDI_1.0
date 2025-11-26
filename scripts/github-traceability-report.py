@@ -26,7 +26,7 @@ from collections import defaultdict
 
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
 REPO_OWNER = 'zarfld'
-REPO_NAME = 'ESP_ClapMetronome'
+REPO_NAME = 'MIDI_1.0'
 API_BASE = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}'
 
 # Label categories for filtering
