@@ -86,18 +86,25 @@ pip install pyyaml jsonschema
 **Generate traceability report**:
 ```bash
 export GITHUB_TOKEN=ghp_xxx
+export GITHUB_REPOSITORY=owner/repo  # Optional: auto-detected in CI
 python scripts/github-traceability-report.py > reports/traceability.md
 ```
 
 **Check for orphans**:
 ```bash
 export GITHUB_TOKEN=ghp_xxx
+export GITHUB_REPOSITORY=owner/repo  # Optional: auto-detected in CI
 python scripts/github-orphan-check.py
 ```
 
+**Repository Auto-Detection**:
+- **In GitHub Actions**: `GITHUB_REPOSITORY` is automatically set to `owner/repo`
+- **Local testing**: Set `GITHUB_REPOSITORY=owner/repo` or `REPO_OWNER` and `REPO_NAME` separately
+- **Fallback**: Defaults to `zarfld/copilot-instructions-template` if not set
+
 **GitHub Actions** (automatic):
 - `.github/workflows/traceability-check.yml` - Runs on PR/issue changes
-- `.github/workflows/issue-validation.yml` - Validates parent links
+- `.github/workflows/ci-standards-compliance.yml` - Comprehensive validation
 
 ## 🚀 Quick Start
 

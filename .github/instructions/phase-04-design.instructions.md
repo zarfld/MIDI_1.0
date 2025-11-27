@@ -812,11 +812,82 @@ input CreateUserInput {
 ```
 ```
 
+## 🏛️ DDD Tactical Patterns Integration
+
+### When Designing Domain Layer Components
+
+Use DDD tactical patterns for domain-rich contexts (see `04-design/patterns/ddd-tactical-patterns.md`):
+
+**Entity** - Objects with identity and continuity
+- Use when: Object has unique identifier and lifecycle
+- Example: User, Order, Account
+- Must have: ID (as Value Object), domain behavior methods, invariant enforcement
+
+**Value Object** - Immutable objects defined by attributes
+- Use when: Only attributes matter, not identity
+- Example: Email, Money, Address
+- Must be: Immutable, side-effect-free functions, equals based on attributes
+
+**Aggregate** - Consistency boundary with one root Entity
+- Use when: Multiple objects need transactional consistency
+- Example: Order (root) + OrderLines (internal)
+- Rules: External references by ID only, one transaction = one Aggregate, root enforces invariants
+
+**Repository** - Collection-like interface for Aggregate Roots
+- Use when: Need to abstract persistence for Aggregate Root
+- Interface in Domain Layer, implementation in Infrastructure Layer
+- Example: IOrderRepository.findById(orderId)
+
+**Factory** - Encapsulates complex object creation
+- Use when: Construction logic is complex or requires validation
+- Example: OrderFactory.createFromCart(customerId, cart)
+
+**Domain Service** - Stateless operations spanning Entities/Aggregates
+- Use when: Operation doesn't fit on Entity or Value Object
+- Example: TransferMoneyService.transfer(fromAccount, toAccount, amount)
+
+**Specification** - Explicit predicate for business rules
+- Use when: Complex validation or selection criteria
+- Example: OverdueInvoiceSpecification.isSatisfiedBy(invoice)
+
+### Design by Contract (DbC)
+
+Apply DbC principles to all public methods (see `04-design/patterns/design-by-contract.md`):
+
+**Preconditions** - What must be true before method executes
+- Document using JSDoc `@precondition` tags
+- Validate at method entry (assertions or exceptions)
+- Example: `@precondition amount > 0`
+
+**Postconditions** - What will be true after method executes
+- Document using JSDoc `@postcondition` tags
+- Verify before method returns
+- Example: `@postcondition balance === old(balance) - amount`
+
+**Invariants** - What must always be true for object
+- Check before and after every public method
+- Document in class-level comment
+- Example: `@invariant balance >= -overdraftLimit`
+
+### Domain Model Design Checklist
+
+For each class, determine:
+- [ ] Is this an Entity (has identity) or Value Object (attributes only)?
+- [ ] What is the Aggregate boundary (if applicable)?
+- [ ] What invariants must be maintained?
+- [ ] What are the preconditions and postconditions for each method?
+- [ ] Where does this fit in Layered Architecture (Domain vs Infrastructure)?
+- [ ] Does this need a Repository? (Only for Aggregate Roots)
+- [ ] Is a Factory needed for complex creation?
+- [ ] Should this be a Domain Service? (Stateless, spans multiple objects)
+
 ## 🚨 Critical Requirements for This Phase
 
 ### Always Do
 ✅ Follow Simple Design principles: runs all tests, no duplication, expresses intent, minimizes elements  
 ✅ Design for testability (TDD-ready)  
+✅ Apply DDD patterns appropriately in domain-rich contexts  
+✅ Document contracts (preconditions, postconditions, invariants)  
 ✅ Document all public interfaces  
 ✅ Trace design to architecture and requirements  
 ✅ Use design patterns appropriately (but let them emerge naturally)  
@@ -831,9 +902,11 @@ input CreateUserInput {
 ✅ Program to interfaces, not implementations  
 ✅ Depend on abstractions (Dependency Inversion Principle)  
 ✅ Encapsulate what varies  
-✅ Use side-effect-free functions where possible  
+✅ Use side-effect-free functions where possible (especially in Value Objects)  
 ✅ Refactor continuously to improve design  
 ✅ Strive for loose coupling and high cohesion  
+✅ Keep Aggregates small (2-3 entities max)  
+✅ Isolate Domain Layer from infrastructure concerns  
 
 ### Never Do
 ❌ Over-engineer (YAGNI)  
@@ -852,6 +925,12 @@ input CreateUserInput {
 ❌ Use global data or Singletons as global variables  
 ❌ Create two elements with identical/similar responsibilities  
 ❌ Design entire system before implementation  
+❌ Expose Aggregate internals (always access through root)  
+❌ Create Repositories for non-root Entities  
+❌ Make Value Objects mutable (always immutable)  
+❌ Skip invariant enforcement in Aggregates  
+❌ Allow Entity equality based on attributes (must use ID)  
+❌ Put domain logic in Infrastructure Layer (keep in Domain Layer)  
 
 ## 📊 Phase Entry Criteria
 
@@ -881,6 +960,23 @@ DES-CL-XXX (Design Class)
 [Next Phase: Implementation - CODE-XXX]
 ```
 
+## 🔗 DDD and DbC Resources
+
+### Core Documentation
+- **DDD Tactical Patterns**: `04-design/patterns/ddd-tactical-patterns.md` - Complete guide with code examples
+- **Design by Contract**: `04-design/patterns/design-by-contract.md` - Preconditions, postconditions, invariants
+- **Ubiquitous Language**: `02-requirements/ubiquitous-language.md` - Domain terminology glossary
+- **Context Map**: `03-architecture/context-map.md` - Bounded Context relationships
+
+### Quick Reference
+- Entity: Identity-based, mutable, lifecycle
+- Value Object: Attribute-based, immutable, side-effect-free
+- Aggregate: Consistency boundary, one root, transactional unit
+- Repository: Aggregate Root access, Domain interface, Infrastructure implementation
+- Factory: Complex creation logic, validation
+- Domain Service: Stateless, spans multiple objects
+- Specification: Explicit business rules, composable
+
 ## 🎯 Next Phase
 
 Once this phase is complete, proceed to:
@@ -888,4 +984,4 @@ Once this phase is complete, proceed to:
 
 ---
 
-**Remember**: Design bridges architecture and code. Keep it simple (XP), make it testable (TDD), and document the rationale. Good design enables smooth implementation!
+**Remember**: Design bridges architecture and code. Keep it simple (XP), make it testable (TDD), apply DDD patterns in domain-rich contexts, and document contracts. Good design enables smooth implementation!
