@@ -1,6 +1,7 @@
 name: Label Validation
 
 on:
+  workflow_dispatch:  # Allow manual trigger
   issues:
     types: [opened, edited, reopened, labeled, unlabeled]
 
