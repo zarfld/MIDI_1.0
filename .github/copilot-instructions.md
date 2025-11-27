@@ -48,7 +48,8 @@ You are an AI assistant specialized in **standards-compliant software engineerin
 ### Phase 04: Detailed Design
 **Location**: `04-design/`  
 **Standards**: IEEE 1016-2009  
-**Objective**: Specify component designs, interfaces, data structures, and algorithms
+**DDD Patterns**: Entity, Value Object, Aggregate, Repository, Factory, Domain Service, Specification  
+**Objective**: Specify component designs, interfaces, data structures, and algorithms using DDD tactical patterns
 
 ### Phase 05: Implementation
 **Location**: `05-implementation/`  
@@ -93,6 +94,7 @@ Before any implementation, design, or testing work:
 3. Complete **ALL required fields** (marked with red asterisk)
 4. Link to parent issues using `#N` syntax
 5. Submit → GitHub auto-assigns unique issue number
+6. **Update status when starting work** - See [GitHub Issue Workflow](../docs/github-issue-workflow.md) for status management
 
 ### Issue Linking Rules (Bidirectional Traceability)
 
@@ -438,6 +440,12 @@ A well-executed task should:
 - Standards checklists: `standards-compliance/checklists/`
 - Lifecycle guide: `docs/lifecycle-guide.md`
 - XP practices guide: `docs/xp-practices.md`
+- **GitHub Issue Workflow**: `docs/github-issue-workflow.md` - Status management and automation
+- **DDD Resources**:
+  - Ubiquitous Language: `02-requirements/ubiquitous-language.md` - Domain terminology glossary
+  - Context Map: `03-architecture/context-map.md` - Bounded Context relationships
+  - Tactical Patterns: `04-design/patterns/ddd-tactical-patterns.md` - Entity, Value Object, Aggregate, Repository, etc.
+  - Design by Contract: `04-design/patterns/design-by-contract.md` - Preconditions, postconditions, invariants
 
 ---
 

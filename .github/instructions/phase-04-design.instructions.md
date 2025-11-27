@@ -1,18 +1,19 @@
 ---
-description: "Phase 04 guidance for detailed design following IEEE 1016-2009. Covers component designs, class structures, interfaces, data models, and design patterns with XP simple design principles."
+description: "Phase 04 guidance for detailed design following IEEE 1016-2009. Covers component designs, class structures, interfaces, data models, and design patterns with XP simple design principles and DDD tactical patterns."
 applyTo: "04-design/**"
 ---
 
 # Phase 04: Detailed Design
 
 **Standards**: IEEE 1016-2009 (Software Design Descriptions)  
-**XP Integration**: Simple Design, CRC Cards, Design Patterns
+**XP Integration**: Simple Design, CRC Cards, Design Patterns  
+**DDD Integration**: Entity, Value Object, Aggregate, Repository, Factory, Domain Service, Specification
 
 ## 🎯 Phase Objectives
 
-1. Transform architecture into detailed component designs
-2. Define class structures, interfaces, and algorithms
-3. Specify data models and database schemas
+1. Transform architecture into detailed component designs using DDD tactical patterns
+2. Define class structures, interfaces, and algorithms with Design by Contract
+3. Specify data models and database schemas respecting domain model
 4. Document design patterns and implementation approaches
 5. Create design specifications enabling implementation
 
