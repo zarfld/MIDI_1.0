@@ -81,7 +81,7 @@ pip install pyyaml jsonschema
 - ⏳ **Phase 4**: Data migration (pending)
 - ⏳ **Phase 5**: Deprecate file-based scripts (pending)
 
-### Using New Scripts
+**Using New Scripts**
 
 **Generate traceability report**:
 ```bash
