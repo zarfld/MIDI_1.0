@@ -52,10 +52,7 @@ Represent this matrix as JSON (example) for CI script validation:
     "adrs": ["ADR-GM1-SAMPLE-001"],
     "components": ["DES-C-GM1-SAMPLE-001"],
     "views": ["logical", "data", "deployment"],
-    "tests": ["TEST-GM1-LOADING-001", "TEST-GM1-LOADING-002", "TEST-GM1-LOADING-003", 
-              "TEST-GM1-LOADING-004", "TEST-GM1-LOADING-005", "TEST-GM1-LOADING-006",
-              "TEST-GM1-LOADING-007", "TEST-GM1-LOADING-008", "TEST-GM1-LOADING-009",
-              "TEST-GM1-LOADING-010"],
+    "tests": ["TEST-GM1-LOADING-001 to 010"],
     "gaps": ["ADR-GM1-SAMPLE-001 pending formal creation"]
   }
 ]

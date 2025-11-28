@@ -117,25 +117,40 @@ typedef struct {
     bool        is_percussion;      // True for percussion samples
 } sample_identifier_t;
 
-// Factory method with validation
-sample_identifier_t create_sample_id(uint8_t program, bool is_percussion) {
-    sample_identifier_t id = {0};
+// Result type for sample ID creation
+typedef struct {
+    sample_identifier_t id;
+    bool                is_valid;
+    const char*         error_message;
+} sample_id_result_t;
+
+// Factory method with explicit validation result
+sample_id_result_t create_sample_id(uint8_t program, bool is_percussion) {
+    sample_id_result_t result = {0};
     
     if (is_percussion) {
         // Percussion keys 35-81
         if (program >= 35 && program <= 81) {
-            id.program_number = program;
-            id.is_percussion = true;
+            result.id.program_number = program;
+            result.id.is_percussion = true;
+            result.is_valid = true;
+        } else {
+            result.is_valid = false;
+            result.error_message = "Percussion key must be 35-81";
         }
     } else {
         // Melodic programs 1-128
         if (program >= 1 && program <= 128) {
-            id.program_number = program;
-            id.is_percussion = false;
+            result.id.program_number = program;
+            result.id.is_percussion = false;
+            result.is_valid = true;
+        } else {
+            result.is_valid = false;
+            result.error_message = "Melodic program must be 1-128";
         }
     }
     
-    return id;
+    return result;
 }
 
 // Equality based on attributes
@@ -171,6 +186,100 @@ typedef struct {
 ### Enumerations
 
 ```c
+/**
+ * GM1 Instrument Family Constants
+ * ID: CONST-GM1-FAMILIES-001
+ * Defines the program ranges for each GM1 instrument family
+ */
+// Family 1: Piano (Programs 1-8)
+#define GM1_FAMILY_PIANO_START      1
+#define GM1_FAMILY_PIANO_END        8
+#define GM1_FAMILY_PIANO_DEFAULT    1   // Acoustic Grand Piano
+
+// Family 2: Chromatic Percussion (Programs 9-16)
+#define GM1_FAMILY_CHROM_PERC_START 9
+#define GM1_FAMILY_CHROM_PERC_END   16
+#define GM1_FAMILY_CHROM_PERC_DEFAULT 9  // Celesta
+
+// Family 3: Organ (Programs 17-24)
+#define GM1_FAMILY_ORGAN_START      17
+#define GM1_FAMILY_ORGAN_END        24
+#define GM1_FAMILY_ORGAN_DEFAULT    17  // Drawbar Organ
+
+// Family 4: Guitar (Programs 25-32)
+#define GM1_FAMILY_GUITAR_START     25
+#define GM1_FAMILY_GUITAR_END       32
+#define GM1_FAMILY_GUITAR_DEFAULT   25  // Acoustic Guitar (nylon)
+
+// Family 5: Bass (Programs 33-40)
+#define GM1_FAMILY_BASS_START       33
+#define GM1_FAMILY_BASS_END         40
+#define GM1_FAMILY_BASS_DEFAULT     33  // Acoustic Bass
+
+// Family 6: Strings (Programs 41-48)
+#define GM1_FAMILY_STRINGS_START    41
+#define GM1_FAMILY_STRINGS_END      48
+#define GM1_FAMILY_STRINGS_DEFAULT  41  // Violin
+
+// Family 7: Ensemble (Programs 49-56)
+#define GM1_FAMILY_ENSEMBLE_START   49
+#define GM1_FAMILY_ENSEMBLE_END     56
+#define GM1_FAMILY_ENSEMBLE_DEFAULT 49  // String Ensemble 1
+
+// Family 8: Brass (Programs 57-64)
+#define GM1_FAMILY_BRASS_START      57
+#define GM1_FAMILY_BRASS_END        64
+#define GM1_FAMILY_BRASS_DEFAULT    57  // Trumpet
+
+// Family 9: Reed (Programs 65-72)
+#define GM1_FAMILY_REED_START       65
+#define GM1_FAMILY_REED_END         72
+#define GM1_FAMILY_REED_DEFAULT     65  // Soprano Sax
+
+// Family 10: Pipe (Programs 73-80)
+#define GM1_FAMILY_PIPE_START       73
+#define GM1_FAMILY_PIPE_END         80
+#define GM1_FAMILY_PIPE_DEFAULT     73  // Piccolo
+
+// Family 11: Synth Lead (Programs 81-88)
+#define GM1_FAMILY_SYNTH_LEAD_START 81
+#define GM1_FAMILY_SYNTH_LEAD_END   88
+#define GM1_FAMILY_SYNTH_LEAD_DEFAULT 81  // Square Lead
+
+// Family 12: Synth Pad (Programs 89-96)
+#define GM1_FAMILY_SYNTH_PAD_START  89
+#define GM1_FAMILY_SYNTH_PAD_END    96
+#define GM1_FAMILY_SYNTH_PAD_DEFAULT 89  // New Age Pad
+
+// Family 13: Synth Effects (Programs 97-104)
+#define GM1_FAMILY_SYNTH_FX_START   97
+#define GM1_FAMILY_SYNTH_FX_END     104
+#define GM1_FAMILY_SYNTH_FX_DEFAULT 97  // Rain
+
+// Family 14: Ethnic (Programs 105-112)
+#define GM1_FAMILY_ETHNIC_START     105
+#define GM1_FAMILY_ETHNIC_END       112
+#define GM1_FAMILY_ETHNIC_DEFAULT   105 // Sitar
+
+// Family 15: Percussive (Programs 113-120)
+#define GM1_FAMILY_PERCUSSIVE_START 113
+#define GM1_FAMILY_PERCUSSIVE_END   120
+#define GM1_FAMILY_PERCUSSIVE_DEFAULT 113  // Tinkle Bell
+
+// Family 16: Sound Effects (Programs 121-128)
+#define GM1_FAMILY_SFX_START        121
+#define GM1_FAMILY_SFX_END          128
+#define GM1_FAMILY_SFX_DEFAULT      121 // Guitar Fret Noise
+
+// Percussion range
+#define GM1_PERCUSSION_KEY_START    35
+#define GM1_PERCUSSION_KEY_END      81
+
+// Total counts
+#define GM1_MELODIC_PROGRAMS        128
+#define GM1_PERCUSSION_SOUNDS       47
+#define GM1_TOTAL_SOUNDS            175  // 128 + 47
+
 /**
  * Loading Strategy - Strategy Pattern
  * ID: ENUM-LOAD-STRATEGY-001
@@ -435,42 +544,58 @@ void handle_program_load_failure(gm1_sample_manager_t* mgr,
 }
 
 uint8_t get_substitute_program(uint8_t failed_program) {
-    // Return substitute from same instrument family
-    // Piano family (1-8)
-    if (failed_program >= 1 && failed_program <= 8) return 1;
-    // Chromatic percussion (9-16)
-    if (failed_program >= 9 && failed_program <= 16) return 9;
-    // Organ (17-24)
-    if (failed_program >= 17 && failed_program <= 24) return 17;
-    // Guitar (25-32)
-    if (failed_program >= 25 && failed_program <= 32) return 25;
-    // Bass (33-40)
-    if (failed_program >= 33 && failed_program <= 40) return 33;
-    // Strings (41-48)
-    if (failed_program >= 41 && failed_program <= 48) return 41;
-    // Ensemble (49-56)
-    if (failed_program >= 49 && failed_program <= 56) return 49;
-    // Brass (57-64)
-    if (failed_program >= 57 && failed_program <= 64) return 57;
-    // Reed (65-72)
-    if (failed_program >= 65 && failed_program <= 72) return 65;
-    // Pipe (73-80)
-    if (failed_program >= 73 && failed_program <= 80) return 73;
-    // Synth Lead (81-88)
-    if (failed_program >= 81 && failed_program <= 88) return 81;
-    // Synth Pad (89-96)
-    if (failed_program >= 89 && failed_program <= 96) return 89;
-    // Synth Effects (97-104)
-    if (failed_program >= 97 && failed_program <= 104) return 97;
-    // Ethnic (105-112)
-    if (failed_program >= 105 && failed_program <= 112) return 105;
-    // Percussive (113-120)
-    if (failed_program >= 113 && failed_program <= 120) return 113;
-    // Sound Effects (121-128)
-    if (failed_program >= 121 && failed_program <= 128) return 121;
+    // Return substitute from same instrument family using defined constants
+    // Piano family
+    if (failed_program >= GM1_FAMILY_PIANO_START && failed_program <= GM1_FAMILY_PIANO_END) 
+        return GM1_FAMILY_PIANO_DEFAULT;
+    // Chromatic percussion
+    if (failed_program >= GM1_FAMILY_CHROM_PERC_START && failed_program <= GM1_FAMILY_CHROM_PERC_END) 
+        return GM1_FAMILY_CHROM_PERC_DEFAULT;
+    // Organ
+    if (failed_program >= GM1_FAMILY_ORGAN_START && failed_program <= GM1_FAMILY_ORGAN_END) 
+        return GM1_FAMILY_ORGAN_DEFAULT;
+    // Guitar
+    if (failed_program >= GM1_FAMILY_GUITAR_START && failed_program <= GM1_FAMILY_GUITAR_END) 
+        return GM1_FAMILY_GUITAR_DEFAULT;
+    // Bass
+    if (failed_program >= GM1_FAMILY_BASS_START && failed_program <= GM1_FAMILY_BASS_END) 
+        return GM1_FAMILY_BASS_DEFAULT;
+    // Strings
+    if (failed_program >= GM1_FAMILY_STRINGS_START && failed_program <= GM1_FAMILY_STRINGS_END) 
+        return GM1_FAMILY_STRINGS_DEFAULT;
+    // Ensemble
+    if (failed_program >= GM1_FAMILY_ENSEMBLE_START && failed_program <= GM1_FAMILY_ENSEMBLE_END) 
+        return GM1_FAMILY_ENSEMBLE_DEFAULT;
+    // Brass
+    if (failed_program >= GM1_FAMILY_BRASS_START && failed_program <= GM1_FAMILY_BRASS_END) 
+        return GM1_FAMILY_BRASS_DEFAULT;
+    // Reed
+    if (failed_program >= GM1_FAMILY_REED_START && failed_program <= GM1_FAMILY_REED_END) 
+        return GM1_FAMILY_REED_DEFAULT;
+    // Pipe
+    if (failed_program >= GM1_FAMILY_PIPE_START && failed_program <= GM1_FAMILY_PIPE_END) 
+        return GM1_FAMILY_PIPE_DEFAULT;
+    // Synth Lead
+    if (failed_program >= GM1_FAMILY_SYNTH_LEAD_START && failed_program <= GM1_FAMILY_SYNTH_LEAD_END) 
+        return GM1_FAMILY_SYNTH_LEAD_DEFAULT;
+    // Synth Pad
+    if (failed_program >= GM1_FAMILY_SYNTH_PAD_START && failed_program <= GM1_FAMILY_SYNTH_PAD_END) 
+        return GM1_FAMILY_SYNTH_PAD_DEFAULT;
+    // Synth Effects
+    if (failed_program >= GM1_FAMILY_SYNTH_FX_START && failed_program <= GM1_FAMILY_SYNTH_FX_END) 
+        return GM1_FAMILY_SYNTH_FX_DEFAULT;
+    // Ethnic
+    if (failed_program >= GM1_FAMILY_ETHNIC_START && failed_program <= GM1_FAMILY_ETHNIC_END) 
+        return GM1_FAMILY_ETHNIC_DEFAULT;
+    // Percussive
+    if (failed_program >= GM1_FAMILY_PERCUSSIVE_START && failed_program <= GM1_FAMILY_PERCUSSIVE_END) 
+        return GM1_FAMILY_PERCUSSIVE_DEFAULT;
+    // Sound Effects
+    if (failed_program >= GM1_FAMILY_SFX_START && failed_program <= GM1_FAMILY_SFX_END) 
+        return GM1_FAMILY_SFX_DEFAULT;
     
     // Default fallback: Piano
-    return 1;
+    return GM1_FAMILY_PIANO_DEFAULT;
 }
 ```
 
