@@ -18,7 +18,7 @@
 #include <math.h>
 
 /* Include the implementation header */
-#include "../src/gm1/gm1_sound_quality.h"
+#include "gm1/gm1_sound_quality.h"
 
 /*============================================================================
  * Test Utilities
